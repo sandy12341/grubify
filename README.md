@@ -2,6 +2,15 @@
 
 A modern food delivery application built with React TypeScript frontend and .NET backend, designed for deployment to Azure Container Apps using Azure Developer CLI (azd).
 
+## Starter demo source
+
+The `demo/starter-source` branch adds Azure Monitor OpenTelemetry request and
+dependency instrumentation when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set.
+Without that environment variable, local behavior is unchanged. The intentional
+cart analytics-cache leak is preserved for the Starter demonstration. Restarting
+all active API revisions clears that process-local cache and in-memory carts;
+deleting a cart alone does not reset the leaked buffers.
+
 ## 🍕 Features
 
 - **Modern UI**: Beautiful, responsive design inspired by popular food delivery apps
@@ -108,4 +117,3 @@ Now you have:
 4. **Setup incident handler** with custom instructions for automated diagnosis and mitigation
 5. **Simulate memory leak** using the deployed application endpoints
 6. **Create incident in Service Now** to trigger SRE agent response
-
