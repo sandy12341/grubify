@@ -11,6 +11,11 @@ cart analytics-cache leak is preserved for the Starter demonstration. Restarting
 all active API revisions clears that process-local cache and in-memory carts;
 deleting a cart alone does not reset the leaked buffers.
 
+The frontend Docker build and package engine use Node.js 24 LTS. The production
+image still serves static files from nginx; the runtime upgrade does not change
+the intentional API fault. The Starter source workflow checks engine alignment
+and builds the complete frontend container without Azure credentials.
+
 ## 🍕 Features
 
 - **Modern UI**: Beautiful, responsive design inspired by popular food delivery apps

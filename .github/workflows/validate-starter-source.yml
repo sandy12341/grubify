@@ -1,0 +1,35 @@
+name: Validate Starter source
+
+on:
+  push:
+    branches: ['demo/starter-source']
+  pull_request:
+    paths:
+      - 'grubify-frontend/**'
+      - '.github/workflows/validate-starter-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Verify build runtime alignment
+        run: |
+          node <<'JS'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const root = './grubify-frontend/';
+          assert.equal(process.versions.node.split('.')[0], '24');
+          assert.equal(require(root + 'package.json').engines.node, '24.x');
+          assert.equal(require(root + 'package-lock.json').packages[''].engines.node, '24.x');
+          assert.match(fs.readFileSync(root + 'Dockerfile', 'utf8'), /^FROM node:24-alpine AS build$/m);
+          JS
+      - name: Build frontend container
+        run: docker build --tag starter-frontend:validation ./grubify-frontend
